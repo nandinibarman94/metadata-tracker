@@ -14,9 +14,9 @@ class Datasets(Base):
     name = Column(String, nullable=False)
     description = Column(String)
     dbId = Column(Integer, ForeignKey("databases.id"))
-    createdOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    createdOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     createdBy = Column(String, nullable=False)
-    updatedOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updatedBy = Column(String, nullable=False)
 
     databases = relationship("Databases", back_populates="datasets")

@@ -21,9 +21,9 @@ class DataElements(Base):
     isNullable = Column(Boolean, default=True)
     fkTable = Column(String)
     fkColumn = Column(String)
-    createdOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    createdOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     createdBy = Column(String, nullable=False)
-    updatedOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updatedBy = Column(String, nullable=False)
 
     datasets = relationship("Datasets", back_populates="dataelements")

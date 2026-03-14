@@ -13,9 +13,9 @@ class Databases(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     owner = Column(String, nullable=False)
-    createdOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    createdOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     createdBy = Column(String, nullable=False)
-    updatedOn = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+    updatedOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updatedBy = Column(String, nullable=False)
 
     datasets = relationship("Datasets", back_populates="databases")
