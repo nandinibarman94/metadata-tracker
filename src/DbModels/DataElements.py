@@ -27,3 +27,7 @@ class DataElements(Base):
     updatedBy = Column(String, nullable=False)
 
     datasets = relationship("Datasets", back_populates="dataelements")
+
+    @property
+    def datasetName(self):
+        return self.datasets.name
