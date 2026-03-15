@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from datetime import datetime,timezone
 from .Base import Base
 
 class Datasets(Base):
@@ -13,15 +12,15 @@ class Datasets(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
-    dbId = Column(Integer, ForeignKey("databases.id"))
-    createdOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    dbId = Column(Integer, ForeignKey("sourcesystems.id"))
+    createdOn = Column(DateTime, nullable=False)
     createdBy = Column(String, nullable=False)
-    updatedOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updatedOn = Column(DateTime, nullable=False)
     updatedBy = Column(String, nullable=False)
 
-    databases = relationship("Databases", back_populates="datasets")
+    sourcesystems = relationship("SourceSystems", back_populates="datasets")
     dataelements = relationship("DataElements", back_populates="datasets", cascade="all, delete")
 
     @property
-    def databaseName(self):
-        return self.databases.name
+    def sourceSystemName(self):
+        return self.sourcesystems.name

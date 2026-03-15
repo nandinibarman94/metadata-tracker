@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from datetime import datetime,timezone
 from .Base import Base
 
 class DataElements(Base):
@@ -19,11 +18,11 @@ class DataElements(Base):
     isPrimary = Column(Boolean, default=False)
     isUnique = Column(Boolean, default=False)
     isNullable = Column(Boolean, default=True)
-    fkTable = Column(String)
-    fkColumn = Column(String)
-    createdOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    referenceTableId = Column(String)
+    referenceColumnId = Column(String)
+    createdOn = Column(DateTime, nullable=False)
     createdBy = Column(String, nullable=False)
-    updatedOn = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updatedOn = Column(DateTime, nullable=False)
     updatedBy = Column(String, nullable=False)
 
     datasets = relationship("Datasets", back_populates="dataelements")

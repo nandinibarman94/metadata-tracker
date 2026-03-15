@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .dbConnection import engine
 from .DbModels.Base import Base
-from .DbModels.Databases import Databases
+from .DbModels.SourceSystems import SourceSystems
 from .Routers import datasetRouter, dataelementRouter
 
 Base.metadata.create_all(bind=engine)
