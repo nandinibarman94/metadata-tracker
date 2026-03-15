@@ -14,17 +14,17 @@ class GetDataset(BaseModel):
     id: int
     name: str
     description: Optional[str]
-    databaseName: str
+    sourceSystemName: str
     createdOn: datetime
     createdBy: str
     updatedOn: datetime
     updatedBy: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class GetDatasetWithElements(GetDataset):
     dataelements: list[GetDataElement] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
