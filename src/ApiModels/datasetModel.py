@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
+from .dataelementModel import GetDataElement
 
 class CreateDataset(BaseModel):
     name: str
@@ -7,3 +9,22 @@ class CreateDataset(BaseModel):
     dbId: int
     createdBy: str
     updatedBy: str
+
+class GetDataset(BaseModel):
+    id: int
+    name: str
+    description: Optional[str]
+    databaseName: str
+    createdOn: datetime
+    createdBy: str
+    updatedOn: datetime
+    updatedBy: str
+    
+    class Config:
+        orm_mode = True
+
+class GetDatasetWithElements(GetDataset):
+    dataelements: list[GetDataElement] = []
+
+    class Config:
+        orm_mode = True

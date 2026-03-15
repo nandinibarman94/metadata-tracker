@@ -21,3 +21,7 @@ class Datasets(Base):
 
     databases = relationship("Databases", back_populates="datasets")
     dataelements = relationship("DataElements", back_populates="datasets", cascade="all, delete")
+
+    @property
+    def databaseName(self):
+        return self.databases.name
