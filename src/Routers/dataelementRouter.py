@@ -7,7 +7,9 @@ from typing import Optional
 
 router = APIRouter(prefix="/elements", tags=["Data Elements"])
 
-@router.post("/")
+@router.post("/", summary="Create a new data element",
+    description="Creates a new data element and associates it with a dataset using the provided dataset ID.",
+    operation_id="createDataElement")
 def createDataElement(element: CreateDataElement, datasetId: int = Query(...), db: Session = Depends(get_db)):
     try:
         createdElement = repository.createDataelement(db, datasetId, element.model_dump())
@@ -22,7 +24,12 @@ def createDataElement(element: CreateDataElement, datasetId: int = Query(...), d
             detail=f"Failed to create data element: {str(e)}"
         )
 
-@router.get("/", response_model=list[GetDataElement])
+@router.get("/", response_model=list[GetDataElement], summary="Retrieve data elements",
+    description="""
+                Returns a list of data elements.  
+                Optional filters can be applied to narrow the results.
+        """,
+        operation_id="listDataElements")
 def getDataElements( datasetId: Optional[int] = Query(None), pii: Optional[bool] = Query(None), datatype: Optional[str] = Query(None),   db: Session = Depends(get_db)):
     elements = repository.getDataElements(
         db,
