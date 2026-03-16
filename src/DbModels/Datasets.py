@@ -6,13 +6,13 @@ class Datasets(Base):
     __tablename__ = "datasets"
 
     __table_args__ = (
-        UniqueConstraint("name", "dbId", name="UQ_Datasets"),
+        UniqueConstraint("name", "sourceSystemId", name="UQ_Datasets"),
     )
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
-    dbId = Column(Integer, ForeignKey("sourcesystems.id"))
+    sourceSystemId = Column(Integer, ForeignKey("sourcesystems.id"))
     createdOn = Column(DateTime, nullable=False)
     createdBy = Column(String, nullable=False)
     updatedOn = Column(DateTime, nullable=False)

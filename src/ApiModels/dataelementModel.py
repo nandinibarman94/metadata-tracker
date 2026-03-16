@@ -11,8 +11,6 @@ class CreateDataElement(BaseModel):
     isPrimary: Optional[bool] = False
     isUnique: Optional[bool] = None
     isNullable: Optional[bool] = None
-    referenceTableName: Optional[str] = None
-    referenceColumnName: Optional[str] = None
     createdBy: str
     updatedBy: str
 
@@ -46,8 +44,6 @@ class GetDataElement(BaseModel):
     isPrimary: bool
     isUnique: bool
     isNullable: bool
-    referenceTableName: Optional[str]
-    referenceColumnName: Optional[str]
     createdOn: datetime
     createdBy: str
     updatedOn: datetime
