@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ..dbConnection import get_db
-from ..ApiModels.datasetModel import CreateDataset, GetDataset, GetDatasetWithElements
-from .. import repository
+from dbConnection import get_db
+from ApiModels.datasetModel import CreateDataset, GetDataset, GetDatasetWithElements
+import repository
 router = APIRouter(prefix="/datasets", tags=["Datasets"])
 
 @router.post("/",  summary="Create a new dataset",

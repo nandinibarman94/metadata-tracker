@@ -1,4 +1,4 @@
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -49,5 +49,4 @@ class GetDataElement(BaseModel):
     updatedOn: datetime
     updatedBy: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
