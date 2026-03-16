@@ -1,0 +1,6 @@
+[virtualenvs]
+craete=true
+in-project = true
+
+[virtualenvs.options]
+system-site-packages = false 
