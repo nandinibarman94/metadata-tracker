@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from ..dbConnection import get_db
-from ..ApiModels.dataElementModel import CreateDataElement, GetDataElement
-from .. import repository
+from dbConnection import get_db
+from ApiModels.dataElementModel import CreateDataElement, GetDataElement
+import repository
 from typing import Optional
 
 router = APIRouter(prefix="/elements", tags=["Data Elements"])
