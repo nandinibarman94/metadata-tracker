@@ -19,8 +19,6 @@ class DataElements(Base):
     isPrimary = Column(Boolean, default=False)
     isUnique = Column(Boolean, default=False)
     isNullable = Column(Boolean, default=True)
-    referenceTableName = Column(String)
-    referenceColumnName = Column(String)
     createdOn = Column(DateTime, nullable=False)
     createdBy = Column(String, nullable=False)
     updatedOn = Column(DateTime, nullable=False)

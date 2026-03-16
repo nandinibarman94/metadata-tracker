@@ -6,7 +6,7 @@ from .dataelementModel import GetDataElement
 class CreateDataset(BaseModel):
     name: str
     description: Optional[str] = None
-    dbId: int
+    sourceSystemId: int
     createdBy: str
     updatedBy: str
 
