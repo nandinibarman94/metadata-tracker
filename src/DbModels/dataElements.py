@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from .Base import Base
+from .base import Base
 
 class DataElements(Base):
     __tablename__ = "dataelements"

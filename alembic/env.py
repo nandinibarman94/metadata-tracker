@@ -13,8 +13,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from DbModels.Base import Base
-from DbModels import DataElements, Datasets, SourceSystems
+from DbModels.base import Base
+from DbModels import dataElements, datasets, sourceSystems
 
 
 
