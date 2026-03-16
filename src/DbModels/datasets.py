@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from .Base import Base
+from .base import Base
 
 class Datasets(Base):
     __tablename__ = "datasets"

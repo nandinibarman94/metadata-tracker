@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-from .dataelementModel import GetDataElement
+from .dataElementModel import GetDataElement
 
 class CreateDataset(BaseModel):
     name: str

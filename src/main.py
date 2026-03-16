@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from .dbConnection import engine
-from .DbModels.Base import Base
-from .DbModels.SourceSystems import SourceSystems
-from .Routers import datasetRouter, dataelementRouter
+from .DbModels.base import Base
+from .DbModels.sourceSystems import SourceSystems
+from .Routers import datasetRouter, dataElementRouter
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,4 +26,4 @@ app = FastAPI(title="Metadata Management System",
               description= "Metadata Management APIs for managing **datasets** and **data elements**"
             )
 app.include_router(datasetRouter.router)
-app.include_router(dataelementRouter.router)
+app.include_router(dataElementRouter.router)
