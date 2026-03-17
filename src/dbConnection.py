@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
+from config import configSetting
 
-engine = create_engine("sqlite:///C:/assignment/metadata-tracker/sqlite/MetadataTracker.db")
+engine = create_engine(configSetting.DB_PATH)
 
 # Enable SQLite constraints on every connection
 @event.listens_for(engine, "connect")
