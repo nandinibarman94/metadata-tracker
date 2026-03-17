@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from DbModels.sourceSystems import SourceSystems
 from Routers import datasetRouter, dataElementRouter
 
 tags_metadata = [
