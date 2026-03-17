@@ -1,10 +1,6 @@
 from fastapi import FastAPI
-from dbConnection import engine
-from DbModels.base import Base
 from DbModels.sourceSystems import SourceSystems
 from Routers import datasetRouter, dataElementRouter
-
-Base.metadata.create_all(bind=engine)
 
 tags_metadata = [
     {

@@ -14,10 +14,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from DbModels.base import Base
-from DbModels import dataElements, datasets, sourceSystems
-
-
-
+from config import configSetting 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -38,7 +35,7 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
+config.set_main_option("sqlalchemy.url", configSetting.DB_PATH)
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
