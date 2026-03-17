@@ -80,6 +80,7 @@ These rules ensure that all primary key columns remain **unique and non-nullable
      ===============================================================================
      -- Run `poetry run uvicorn src.main:app --reload` to start the application
      -- Navigate to /docs to access the Swagger UI.
+     -- Run `poetry run pytest -v` if you want to run the test cases.
 
    **Follow these steps if you want to use Docker**
      -- Clone the repository https://github.com/nandinibarman94/metadata-tracker.git
@@ -107,7 +108,8 @@ These rules ensure that all primary key columns remain **unique and non-nullable
         sqlite> .exit
         root@f71cac56e9ed:/metadata-tracker# 
    ==============================================================================================
-   - Run `poetry run uvicorn src.main:app --reload --host 0.0.0.0 --port 8080` to start the application 
-   - Navigate to `http://localhost:8000/docs` to see the Swagger UI.
+    -- Run `poetry run uvicorn src.main:app --reload --host 0.0.0.0 --port 8080` to start the application 
+    -- Navigate to `http://localhost:8000/docs` to see the Swagger UI.
+    --  Run `poetry run pytest -v` if you want to run the test cases.
     
 
