@@ -3,7 +3,7 @@ from pydantic import Field
 
 class Config(BaseSettings):
     DB_FILE: str = Field(
-        default="sqlite/MetadataTracker.db",
+        default="MetadataTracker.db",
         description="Path to SQLite database file"
     )
  
