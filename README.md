@@ -64,7 +64,7 @@ These rules ensure that all primary key columns remain **unique and non-nullable
      -- Pre-requisites : python >=3.14, poetry and sqlite
      -- Clone the repository https://github.com/nandinibarman94/metadata-tracker.git
      -- Inside project root folder run `poetry install`
-     -- Run `poetry run alembic upgrade head`- This will create the database(MetadataTracker.db) and the tables in the database for you. Additionally, it will create a row in the sourcesystem table for your convenience. You can run the select statement to see the row created. You can either use the 'DB browser for SQLite' or run the below commands in sqlite CLI
+     -- Run `poetry run alembic upgrade head`- This will create the database(MetadataTracker.db) and the tables in the database for you. Additionally, it will create a row in the sourcesystem table as master data. You can run the select statement to see the row created. You can either use the 'DB browser for SQLite' or run the below commands in sqlite CLI
      =====================================================================
         PS C:\assignment\metadata-tracker> sqlite3 MetadataTracker.db
         SQLite version 3.51.2 2026-01-09 17:27:48
@@ -87,7 +87,7 @@ These rules ensure that all primary key columns remain **unique and non-nullable
      -- Build the docker file using `docker build -t metadata-tracker-image:1.0 .`
      --Run the container using `docker run -it -p 8000:8080 metadata-tracker-image:1.0`.
      You can also pass an environment variable DB_FILE in your docker run command like `docker run -it -e DB_FILE=<yourDBName.db> -p 8000:8080 metadata-tracker-image:1.0`. If you do not pass any env variable, MetadataTracker.db would be created as your default DB.
-     -- Run `poetry run alembic upgrade head`- This will create the database and tables in the database for you. Additionally, it will create a row in the sourcesystem table for your convenience. You can run the below commands in sqlite CLI to verify the same. I passed 'MDTracker.db' in DB_FILE env variable.
+     -- Run `poetry run alembic upgrade head`- This will create the database and tables in the database for you. Additionally, it will create a row in the sourcesystem table as master data. You can run the below commands in sqlite CLI to verify the same. I passed 'MDTracker.db' in DB_FILE env variable.
     ==============================================================================================
         PS C:\assignment\metadata-tracker> docker run -it -e DB_FILE=MDTracker.db  -p 8000:8080 metadata-tracker-image:1.0
         root@f71cac56e9ed:/metadata-tracker# poetry run alembic upgrade head
