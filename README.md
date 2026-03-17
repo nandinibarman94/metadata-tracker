@@ -58,4 +58,43 @@ Validation rules have been implemented to enforce data integrity for primary key
 These rules ensure that all primary key columns remain **unique and non-nullable**, maintaining consistency with standard database primary key constraints.
 
 ## Improvement and Enhancement Areas
+## Steps to run the application 
+  - Clone the repository https://github.com/nandinibarman94/metadata-tracker.git
+  - Build the docker file using `docker build -t metadata-tracker-image:1.0 .`
+  - Run the container, do not miss setting up the ENV variable `DB_FILE` using `docker run -it  -e DB_FILE=<your db filepath.db> -p 8000:8080 metadata-tracker-image:1.0`.
+    Below is an example of docker run command- `docker run -it  -e DB_FILE=sqlite/MDTracker.db -p 8000:8080 metadata-tracker-image:1.0`
+  - Create a database using `sqlite3 <dbname.db>`. 
+  - Check if your database is created using `.databases`
+  - Type .exit to move out of the sqlite environment
+  - If you want to double check, then run the `ls` command to make sure your db is created in the right place.
+    Below is a step by step illustration of creating the db:
+    ----------------------------------------------------------
+    root@8878073208e1:/metadata-tracker# mkdir sqlite
+    root@8878073208e1:/metadata-tracker# cd sqlite
+    root@8878073208e1:/metadata-tracker/sqlite# sqlite3 MDTracker.db
+    SQLite version 3.46.1 2024-08-13 09:16:08
+    Enter ".help" for usage hints.
+    sqlite> .databases
+    main: /metadata-tracker/sqlite/MDTracker.db r/w
+    sqlite> .exit
+    root@8878073208e1:/metadata-tracker/sqlite# ls
+    MDTracker.db
+    ----------------------------------------------------
+  - Move to the root folder metadata-tracker and run the alembic upgrade command to create the three tables.
+    `poetry run alembic upgrade head`
+  - You can verify if your tables are created using the `.tables` command inside the sqlite environment.
+   ------------------------------------------------------------
+   root@8878073208e1:/metadata-tracker/sqlite# cd ..
+   root@8878073208e1:/metadata-tracker# poetry run alembic upgrade head
+   Skipping virtualenv creation, as specified in config file.
+   INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+   INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+   INFO  [alembic.runtime.migration] Running upgrade  -> efb5de449e26, database setup
+   root@8878073208e1:/metadata-tracker# cd sqlite
+   root@8878073208e1:/metadata-tracker/sqlite# sqlite3 MDTracker.db
+   SQLite version 3.46.1 2024-08-13 09:16:08
+   Enter ".help" for usage hints.
+   sqlite> .tables
+   alembic_version  dataelements     datasets         sourcesystems  
+    
 
