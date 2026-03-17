@@ -21,9 +21,5 @@ app = FastAPI(title="Metadata Management System",
               description= "Metadata Management APIs for managing **datasets** and **data elements**"
             )
 
-@app.get('/')
-def showInLandingPage():
-    return {"detail" : "Metadata Management System"}
-        
 app.include_router(datasetRouter.router)
 app.include_router(dataElementRouter.router)

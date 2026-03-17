@@ -2,7 +2,7 @@
 FROM python:3-slim
 
 # Setting working directory
-WORKDIR /app
+WORKDIR /metadata-tracker
 
 # Installing SQLite
 RUN apt-get update && apt-get install -y sqlite3
@@ -15,16 +15,16 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=0 \
     POETRY_VIRTUAL_ENVS_IN_PROJECT=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache \
-    PYTHONPATH=/app/src
+    PYTHONPATH=/metadata-tracker/src
 
-# Copy dependency files
+# Copying dependency files
 COPY pyproject.toml poetry.lock poetry.toml* ./
 
-# Install dependencies
+# Installing dependencies
 RUN poetry install --no-root && rm -rf "$POETRY_CACHE_DIR"
 
-# Copy application code
-COPY . /app
+# Copying application code
+COPY . .
 
-# Start an interactive shell
+# Starting an interactive shell
 CMD ["bash"]
