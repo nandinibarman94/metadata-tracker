@@ -4,6 +4,9 @@ FROM python:3-slim
 # Setting working directory
 WORKDIR /app
 
+# Installing SQLite
+RUN apt-get update && apt-get install -y sqlite3
+
 # Installing Poetry
 RUN python -m pip install poetry
 
