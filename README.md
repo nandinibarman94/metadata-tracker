@@ -1,5 +1,32 @@
 # Metadata Management System
 
+## Steps to Run the Application
+
+### Without Docker
+
+**Prerequisites**: Python ≥3.14, Poetry, SQLite
+
+```bash
+git clone https://github.com/nandinibarman94/metadata-tracker.git
+cd metadata-tracker
+poetry install
+poetry run alembic upgrade head
+poetry run uvicorn src.main:app --reload
+```
+- `poetry run alembic upgrade head` - This will create the database(MetadataTracker.db) and the tables in the database. Additionally, it will create a row in the sourcesystem table as master data. You can use the `GET /sourcesystems/` endpoint to view the sourcesystem inserted.
+- Navigate to `http://localhost:8000/docs` for Swagger UI. 
+- Run tests with `poetry run pytest -v`.
+
+### With Docker
+
+```bash
+git clone https://github.com/nandinibarman94/metadata-tracker.git
+docker compose up
+```
+- You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
+- No need to run migrations manually. The database and tables are created as part of the migration. A default row is inserted into the sourcesystems table as master data during initialization. Use the `GET /sourcesystems` endpoint to view the sourcesystem inserted.
+- Navigate to `http://localhost:8000/docs` for Swagger UI. 
+
 ## Database Schema Overview
 
 Three tables have been created: `sourcesystems`, `datasets`, and `dataelements`.
@@ -44,7 +71,7 @@ Three tables have been created: `sourcesystems`, `datasets`, and `dataelements`.
 
 ## Validation Rules
 
-* Validation rules enforce data integrity for primary key columns in the `dataelements` entity:
+- Validation rules enforce data integrity for primary key columns in the `dataelements` entity:
 
    When `isPrimary = True`:
   `isUnique` is automatically set to True if not explicitly provided
@@ -52,38 +79,12 @@ Three tables have been created: `sourcesystems`, `datasets`, and `dataelements`.
    Raises validation error if `isUnique` is explicitly set to False
    Raises validation error if `isNullable` is explicitly set to True
 
-* The `datatype` column for the data elements is validated to be one of the predefined enum values -char, varchar, integer, decimal, numeric, float, double, boolean, date, time, timestamp or uuid
+- The `datatype` column for the data elements is validated to be one of the predefined enum values -char, varchar, integer, decimal, numeric, float, double, boolean, date, time, timestamp or uuid
 
-## Steps to Run the Application
-
-### Without Docker
-
-**Prerequisites**: Python ≥3.14, Poetry, SQLite
-
-```bash
-git clone https://github.com/nandinibarman94/metadata-tracker.git
-cd metadata-tracker
-poetry install
-poetry run alembic upgrade head
-poetry run uvicorn src.main:app --reload
-```
-- `poetry run alembic upgrade head` - This will create the database(MetadataTracker.db) and the tables in the database. Additionally, it will create a row in the sourcesystem table as master data. You can use the `GET /sourcesystems/` endpoint to view the sourcesystem inserted.
-- Navigate to `http://localhost:8000/docs` for Swagger UI. 
-- Run tests with `poetry run pytest -v`.
-
-### With Docker
-
-```bash
-git clone https://github.com/nandinibarman94/metadata-tracker.git
-docker compose up
-```
-- You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
-- No need to run migrations manually. The database and tables are created as part of the migration. A default row is inserted into the sourcesystems table as master data during initialization. Use the `GET /sourcesystems` endpoint to view the sourcesystem inserted.
-- Navigate to `http://localhost:8000/docs` for Swagger UI. 
 
 ## Enhancements and Improvements
 
  - Authorization & Authentication - Currently, the application does not enforce authentication or authorization, so all APIs are publicly accessible. This can be improved by implementing token-based authentication. This can be done using JWT tokens or integrating Azure Active Directory via the `fastapi-azure-auth` package. Additionally, the existing createdBy and updatedBy fields are stored as strings, but ideally should be linked to authenticated user identities derived from login information.
  - Relationships between datasets - The existing models do not capture relationships between different datasets—each dataset exists independently, without links or dependencies. To improve this, a separate junction table (e.g., DatasetRelationships) could be created. This would enable tracking dependencies or hierarchy, impact analysis, and better data governance.
  - Considering unique data elements - We could have also considered a separate design possibility where DataElements are globally unique, ensuring that the same data element serves a single purpose and exists only once in the catalog. This could be achieved by removing the datasetId from the uniqueness constraint and maintaining a master registry of DataElements. Each dataset could then reference these global elements via a many-to-many relationship table.
- 
+ - If time allowed, I would have created the infrastructure-as-code (IaC) for the application and deployed it to Azure, including CI/CD pipelines and environment configurations. This would help automate setup, streamline deployments, and maintain consistency across environments.
