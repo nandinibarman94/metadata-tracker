@@ -40,6 +40,7 @@ class GetDataElement(BaseModel):
     name: str
     datatype: DataType
     datasetName: str
+    description : str
     pii: bool
     isActive: bool
     isPrimary: bool
