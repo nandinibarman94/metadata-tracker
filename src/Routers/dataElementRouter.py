@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from dbConnection import get_db
 from ApiModels.dataElementModel import CreateDataElement, GetDataElement
 import repository
@@ -16,6 +17,13 @@ def createDataElement(element: CreateDataElement, datasetId: int = Query(...), d
         if not createdElement:
             raise HTTPException(status_code=404, detail="Dataset not found")
         return {"data": "New data element created"}
+    
+    except IntegrityError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="Database Constraint violation: Data element already exists for the given dataset"
+        )
     
     except Exception as e:
         db.rollback()

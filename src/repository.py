@@ -1,10 +1,15 @@
 from sqlalchemy.orm import Session, joinedload
 from DbModels.datasets import Datasets
 from DbModels.dataElements import DataElements
+from DbModels.sourceSystems import SourceSystems
 from datetime import datetime,timezone
 from typing import Optional
 
 def createDataset(db: Session, dataset):
+    sourceSystem = db.query(SourceSystems).filter(SourceSystems.id == dataset["sourceSystemId"]).first()
+    if not sourceSystem:
+        return None
+    
     dataset = Datasets(
         **dataset,
         createdOn= datetime.now(timezone.utc),
@@ -59,3 +64,6 @@ def getDataElements(db: Session, datasetId: Optional[int] = None, pii: Optional[
     if datatype is not None:
         query = query.filter(DataElements.datatype == datatype)
     return query.all()
+
+def getSourceSystems(db: Session):
+    return db.query(SourceSystems).all()

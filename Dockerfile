@@ -1,5 +1,5 @@
 # Using Python slim image
-FROM python:3-slim
+FROM python:3.14-slim
 
 # Setting working directory
 WORKDIR /metadata-tracker
@@ -25,6 +25,3 @@ RUN poetry install --no-root && rm -rf "$POETRY_CACHE_DIR"
 
 # Copying application code
 COPY . .
-
-# Starting an interactive shell
-CMD ["bash"]
