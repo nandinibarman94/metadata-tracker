@@ -44,7 +44,7 @@ def getDatasets(db: Session = Depends(get_db)):
             detail=f"Failed to fetch dataset: {str(e)}"
         )
     
-@router.get("/{datasetId}", response_model=GetDatasetWithElements, summary="Get dataset by ID",
+@router.get("/{datasetId}", response_model=GetDatasetWithElements, summary="Get dataset by ID along with its data elements",
     description="Returns a dataset along with all associated data elements.",
     operation_id="getDatasetById")
 def getDataset(datasetId: int, db: Session = Depends(get_db)):

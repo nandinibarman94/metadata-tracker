@@ -6,6 +6,7 @@
 
 ```bash
 git clone https://github.com/nandinibarman94/metadata-tracker.git
+cd metadata-tracker
 docker compose up
 ```
 - You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
