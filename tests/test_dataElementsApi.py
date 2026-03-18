@@ -5,8 +5,9 @@ def testGetElements(client):
         {
             "id": 1,
             "name": "customer_id",
-            "datatype": "int",
+            "datatype": "integer",
             "datasetName": "customers",
+            "description": "id of customer table",
             "pii": False,
             "isActive": True,
             "isPrimary": True,
