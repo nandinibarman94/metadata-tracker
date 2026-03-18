@@ -1,115 +1,89 @@
-Metadata Management System
+# Metadata Management System
 
 ## Database Schema Overview
 
-#Three tables have been created (sourcesystems, datasets, dataelements)
+Three tables have been created: `sourcesystems`, `datasets`, and `dataelements`.
 
-#Relationships (Cardinality)
--- `sourcesystems`-> `datasets` - One to Many (Each combination of sourceSystem and owner can have multiple datasets, but each dataset belongs to exactly one combination of sourceSystem and owner)
--- `datasets`-> `dataelements`- One to Many (Each dataset can have multiple data elements, but each data element belongs to exactly one dataset)
+### Relationships (Cardinality)
 
-#Constraints and Considerations
--- `name` and `owningApplication` in `sourcesystems` is a composite unique key.
--- `name` and `sourceSystemId` in `datasets` is a composite unique key as tables can be duplicate across databases, but not within databases
--- `name` and `datasetId` in `dataelements` is a composite unique key as columns can be duplicate across tables, but not within the same table.
+- `sourcesystems` → `datasets`: One to Many (Each combination of sourceSystem and owner can have multiple datasets, but each dataset belongs to exactly one combination)
+- `datasets` → `dataelements`: One to Many (Each dataset can have multiple data elements, but each data element belongs to exactly one dataset)
+
+### Constraints and Considerations
+
+- `name` and `owningApplication` in `sourcesystems` form a composite unique key
+- `name` and `sourceSystemId` in `datasets` form a composite unique key (tables can be duplicate across databases, but not within)
+- `name` and `datasetId` in `dataelements` form a composite unique key (columns can be duplicate across tables, but not within the same table)
 
 ## API Details
-===============================================
-            Dataset APIs
-===============================================
-API Endpoint         | Method | Params          | Status codes  | Description
---------------------------------------------------------------------------------------------------------------------------------
-/datasets            | POST   | -                | 200,422,500  | Create a new dataset in the metadata catalog.
-/datasets            | GET    | -                | 200,500      | Retrieve all datasets.
-/datasets/{datasetId}| GET    | datasetId (int)  | 200,402,422  | Retrieve a dataset and its associated data elements by ID.
 
-===========================================================
-            Data elements APIs
-===========================================================
-API Endpoint| Method | Params                                      | Status Codes   |Description
------------------------------------------------------------------------------------------------------------------------------------------
-/elements   | POST   | datasetId (int)                             | 200,404,422,500| Create a new data element and associate it with a dataset.
-/elements   | GET    | datasetId (int), pii (bool), datatype (str) | 200,422        | Retrieve data elements with optional filters.
+### Dataset APIs
 
-===========================================================
-NOTES:
-- Request Body Models:
-    * CreateDataset – for /datasets POST
-    * CreateDataElement – for /elements POST
+| Endpoint | Method | Params | Status Codes | Description |
+|----------|--------|--------|--------------|-------------|
+| `/datasets` | POST | - | 200, 404,422, 500 | Create a new dataset in the metadata catalog |
+| `/datasets` | GET | - | 200, 500 | Retrieve all datasets |
+| `/datasets/{datasetId}` | GET | `datasetId` (int) | 200, 404, 422 | Retrieve a dataset and its associated data elements by ID |
 
-- Response Models:
-    * GetDataset – Dataset details
-    * GetDatasetWithElements – Dataset details with all associated data elements
-    * GetDataElement – Data element details
-===========================================================
+### Data Elements APIs
+
+| Endpoint | Method | Params | Status Codes | Description |
+|----------|--------|--------|--------------|-------------|
+| `/elements` | POST | `datasetId` (int) | 200, 404, 422, 500 | Create a new data element and associate it with a dataset |
+| `/elements` | GET | `datasetId` (int), `pii` (bool), `datatype` (str) | 200, 422 | Retrieve data elements with optional filters |
+
+### Source Systems API
+| Endpoint | Method | Params | Status Codes | Description |
+|----------|--------|--------|--------------|-------------|
+| `/sourcesystems` | GET | - | 200, 500 | Retrieve all sourcesystems |
+
+### Request/Response Models
+
+- **Request Models**: `CreateDataset` (for POST /datasets), `CreateDataElement` (for POST /elements)
+- **Response Models**: `GetDataset`, `GetDatasetWithElements`, `GetDataElement`, `GetSourceSystem`
 
 ## Validation Rules
 
-Validation rules have been implemented to enforce data integrity for primary key column in the `dataelements` entity.
+* Validation rules enforce data integrity for primary key columns in the `dataelements` entity:
 
-- When a data element is marked as a primary key (`isPrimary = True`):
-  - `isUnique` is automatically set to True if it is not explicitly provided.
-  - `isNullable` is automatically set to False if it is not explicitly provided.
+- When `isPrimary = True`:
+  - `isUnique` is automatically set to True if not explicitly provided
+  - `isNullable` is automatically set to False if not explicitly provided
+  - Raises validation error if `isUnique` is explicitly set to False
+  - Raises validation error if `isNullable` is explicitly set to True
 
-- Additional validations ensure consistency:
-  - If `isPrimary = True` and `isUnique` is explicitly set to False, a validation error is raised.
-  - If `isPrimary = True` and `isNullable` is explicitly set to True, a validation error is raised.
+* The `datatype` column for the data elements must be one of the predefined enum values (char, varchar, integer, decimal, numeric, float, double, boolean, date, time, timestamp or uuid)
 
-These rules ensure that all primary key columns remain **unique and non-nullable**, maintaining consistency with standard database primary key constraints.
+## Steps to Run the Application
 
-## Improvement and Enhancement Areas
-## Steps to run the application 
+### Without Docker
 
-   **Follow these steps if you do not want to use Docker**
-     -- Pre-requisites : python >=3.14, poetry and sqlite
-     -- Clone the repository https://github.com/nandinibarman94/metadata-tracker.git
-     -- Inside project root folder run `poetry install`
-     -- Run `poetry run alembic upgrade head`- This will create the database(MetadataTracker.db) and the tables in the database for you. Additionally, it will create a row in the sourcesystem table as master data. You can run the select statement to see the row created. You can either use the 'DB browser for SQLite' or run the below commands in sqlite CLI
-     =====================================================================
-        PS C:\assignment\metadata-tracker> sqlite3 MetadataTracker.db
-        SQLite version 3.51.2 2026-01-09 17:27:48
-        Enter ".help" for usage hints.
-        sqlite> .databases
-        main: C:\assignment\metadata-tracker\MetadataTracker.db r/w
-        sqlite> .tables
-        alembic_version  dataelements     datasets         sourcesystems  
-        sqlite> select * from sourcesystems;
-        1|OrderDB|data-team|2026-03-17 18:57:33|admin|2026-03-17 18:57:33|admin
-        sqlite> .exit
-        PS C:\assignment\metadata-tracker>  
-     ===============================================================================
-     -- Run `poetry run uvicorn src.main:app --reload` to start the application
-     -- Navigate to /docs to access the Swagger UI.
-     -- Run `poetry run pytest -v` if you want to run the test cases.
+**Prerequisites**: Python ≥3.14, Poetry, SQLite
 
-   **Follow these steps if you want to use Docker**
-     -- Clone the repository https://github.com/nandinibarman94/metadata-tracker.git
-     -- Build the docker file using `docker build -t metadata-tracker-image:1.0 .`
-     --Run the container using `docker run -it -p 8000:8080 metadata-tracker-image:1.0`.
-     You can also pass an environment variable DB_FILE in your docker run command like `docker run -it -e DB_FILE=<yourDBName.db> -p 8000:8080 metadata-tracker-image:1.0`. If you do not pass any env variable, MetadataTracker.db would be created as your default DB.
-     -- Run `poetry run alembic upgrade head`- This will create the database and tables in the database for you. Additionally, it will create a row in the sourcesystem table as master data. You can run the below commands in sqlite CLI to verify the same. I passed 'MDTracker.db' in DB_FILE env variable.
-    ==============================================================================================
-        PS C:\assignment\metadata-tracker> docker run -it -e DB_FILE=MDTracker.db  -p 8000:8080 metadata-tracker-image:1.0
-        root@f71cac56e9ed:/metadata-tracker# poetry run alembic upgrade head
-        Skipping virtualenv creation, as specified in config file.
-        INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
-        INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-        INFO  [alembic.runtime.migration] Running upgrade  -> efb5de449e26, database setup
-        INFO  [alembic.runtime.migration] Running upgrade efb5de449e26 -> 40f463d0dd64, insert default source system
-        root@f71cac56e9ed:/metadata-tracker# sqlite3 MDTracker.db
-        SQLite version 3.46.1 2024-08-13 09:16:08
-        Enter ".help" for usage hints.
-        sqlite> .databases
-        main: /metadata-tracker/MDTracker.db r/w
-        sqlite> .tables
-        alembic_version  dataelements     datasets         sourcesystems  
-        sqlite> select * from sourcesystems;
-        1|OrderDB|data-team|2026-03-17 19:39:38|admin|2026-03-17 19:39:38|admin
-        sqlite> .exit
-        root@f71cac56e9ed:/metadata-tracker# 
-   ==============================================================================================
-    -- Run `poetry run uvicorn src.main:app --reload --host 0.0.0.0 --port 8080` to start the application 
-    -- Navigate to `http://localhost:8000/docs` to see the Swagger UI.
-    --  Run `poetry run pytest -v` if you want to run the test cases.
-    
+```bash
+git clone https://github.com/nandinibarman94/metadata-tracker.git
+cd metadata-tracker
+poetry install
+poetry run alembic upgrade head
+poetry run uvicorn src.main:app --reload
+```
+--`poetry run alembic upgrade head` - This will create the database(MetadataTracker.db) and the tables in the database for you. Additionally, it will create a row in the sourcesystem table as master data. You can use the `GET /sourcesystems/` endpoint to view the sourcesystem inserted.
+-- Navigate to `http://localhost:8000/docs` for Swagger UI. 
+-- Run tests with `poetry run pytest -v`.
 
+### With Docker
+
+```bash
+git clone https://github.com/nandinibarman94/metadata-tracker.git
+docker compose up
+```
+-- You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
+-- No need to run migrations manually. The database and tables are created as part of the migration. A default row is inserted into the sourcesystems table as master data during initialization. Use the `GET /sourcesystems` endpoint to view the sourcesystem inserted.
+-- Navigate to `http://localhost:8000/docs` for Swagger UI. 
+
+## Enhancements and Improvements
+
+ * Authorization & Authentication
+ * Relationships between datasets
+ * Considering unique data elements.
+ 
