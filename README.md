@@ -2,6 +2,16 @@
 
 ## Steps to Run the Application
 
+### With Docker
+
+```bash
+git clone https://github.com/nandinibarman94/metadata-tracker.git
+docker compose up
+```
+- You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
+- No need to run migrations manually. The database and tables are created as part of the migration. A default row is inserted into the sourcesystems table as master data. Use the `GET /sourcesystems` endpoint to view the sourcesystem inserted.
+- Navigate to `http://localhost:8000/docs` for Swagger UI. 
+
 ### Without Docker
 
 **Prerequisites**: Python ≥3.14, Poetry, SQLite
@@ -16,16 +26,6 @@ poetry run uvicorn src.main:app --reload
 - `poetry run alembic upgrade head` - This will create the database(MetadataTracker.db) and the tables in the database. Additionally, it will create a row in the sourcesystem table as master data. You can use the `GET /sourcesystems/` endpoint to view the sourcesystem inserted.
 - Navigate to `http://localhost:8000/docs` for Swagger UI. 
 - Run tests with `poetry run pytest -v`.
-
-### With Docker
-
-```bash
-git clone https://github.com/nandinibarman94/metadata-tracker.git
-docker compose up
-```
-- You can provide a different DB name of your choice in the docker compose file,  default : MetadataTracker.db.
-- No need to run migrations manually. The database and tables are created as part of the migration. A default row is inserted into the sourcesystems table as master data during initialization. Use the `GET /sourcesystems` endpoint to view the sourcesystem inserted.
-- Navigate to `http://localhost:8000/docs` for Swagger UI. 
 
 ## Database Schema Overview
 
@@ -73,11 +73,11 @@ Three tables have been created: `sourcesystems`, `datasets`, and `dataelements`.
 
 - Validation rules enforce data integrity for primary key columns in the `dataelements` entity:
 
-   When `isPrimary = True`:
-  `isUnique` is automatically set to True if not explicitly provided
-  `isNullable` is automatically set to False if not explicitly provided
-   Raises validation error if `isUnique` is explicitly set to False
-   Raises validation error if `isNullable` is explicitly set to True
+   When `isPrimary = True`,
+  `isUnique` is automatically set to True if not explicitly provided and
+  `isNullable` is automatically set to False if not explicitly provided.
+   Raises validation error if `isUnique` is explicitly set to False.
+   Raises validation error if `isNullable` is explicitly set to True.
 
 - The `datatype` column for the data elements is validated to be one of the predefined enum values -char, varchar, integer, decimal, numeric, float, double, boolean, date, time, timestamp or uuid
 
