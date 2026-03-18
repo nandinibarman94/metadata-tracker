@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from Routers import datasetRouter, dataElementRouter
+from Routers import datasetRouter, dataElementRouter, sourceSystemRouter
 
 tags_metadata = [
     {
@@ -9,6 +9,10 @@ tags_metadata = [
     {
         "name": "Data Elements",
         "description": "*Operations for managing individual data elements belonging to datasets.*"
+    },
+    {
+        "name": "Source Systems",
+        "description": "*Operations for retrieving source systems available in the metadata catalog.*"
     }
 ]
 app = FastAPI(title="Metadata Management System", 
@@ -23,3 +27,4 @@ app = FastAPI(title="Metadata Management System",
 
 app.include_router(datasetRouter.router)
 app.include_router(dataElementRouter.router)
+app.include_router(sourceSystemRouter.router)

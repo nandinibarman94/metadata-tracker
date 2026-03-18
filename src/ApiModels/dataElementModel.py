@@ -1,10 +1,11 @@
 from pydantic import BaseModel, model_validator, ConfigDict
 from typing import Optional
 from datetime import datetime
+from enum import Enum
 
 class CreateDataElement(BaseModel):
     name: str
-    datatype: str
+    datatype: DataType
     description: Optional[str]
     pii: Optional[bool] = False
     isActive: Optional[bool] = True
@@ -37,8 +38,9 @@ class CreateDataElement(BaseModel):
 class GetDataElement(BaseModel):
     id: int
     name: str
-    datatype: str
+    datatype: DataType
     datasetName: str
+    description : str
     pii: bool
     isActive: bool
     isPrimary: bool
@@ -50,3 +52,17 @@ class GetDataElement(BaseModel):
     updatedBy: str
 
     model_config = ConfigDict(from_attributes=True)
+
+class DataType(str, Enum):
+    CHAR = "char"
+    VARCHAR = "varchar"
+    INTEGER = "integer"
+    DECIMAL = "decimal"
+    NUMERIC = "numeric"
+    FLOAT = "float"
+    DOUBLE = "double"
+    BOOLEAN = "boolean"
+    DATE = "date"
+    TIME = "time"
+    TIMESTAMP = "timestamp"
+    UUID = "uuid"

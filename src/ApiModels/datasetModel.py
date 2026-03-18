@@ -13,7 +13,7 @@ class CreateDataset(BaseModel):
 class GetDataset(BaseModel):
     id: int
     name: str
-    description: Optional[str] = None
+    description: str
     sourceSystemName: str
     createdOn: datetime
     createdBy: str
